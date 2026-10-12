@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import ComingSoonPage from './pages/ComingSoonPage'
 import DashboardPage from './pages/DashboardPage'
+import DepartmentsPage from './pages/DepartmentsPage'
 import FacultiesPage from './pages/FacultiesPage'
 import LoginPage from './pages/LoginPage'
 import { clearSession, loadSession } from './lib/auth'
@@ -39,6 +40,10 @@ function App() {
           <Route
             path="faculties"
             element={isUniversityAdmin ? <FacultiesPage /> : <Navigate to="/" replace />}
+          />
+          <Route
+            path="departments"
+            element={isUniversityAdmin ? <DepartmentsPage /> : <Navigate to="/" replace />}
           />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>

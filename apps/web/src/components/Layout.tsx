@@ -16,6 +16,7 @@ interface NavItem {
 const adminNav: NavItem[] = [
   { to: '/', label: 'Dashboard' },
   { to: '/faculties', label: 'Faculties' },
+  { to: '/departments', label: 'Departments' },
 ]
 
 const defaultNav: NavItem[] = [{ to: '/', label: 'Dashboard' }]
