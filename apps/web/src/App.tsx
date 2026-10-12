@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import ComingSoonPage from './pages/ComingSoonPage'
 import DashboardPage from './pages/DashboardPage'
+import FacultiesPage from './pages/FacultiesPage'
 import LoginPage from './pages/LoginPage'
 import { clearSession, loadSession } from './lib/auth'
 import type { Session } from './lib/auth'
@@ -34,6 +35,10 @@ function App() {
                 <ComingSoonPage role={session.user.role} />
               )
             }
+          />
+          <Route
+            path="faculties"
+            element={isUniversityAdmin ? <FacultiesPage /> : <Navigate to="/" replace />}
           />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>

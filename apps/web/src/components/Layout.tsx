@@ -8,10 +8,22 @@ interface LayoutProps {
   onLogout: () => void
 }
 
-const navItems = [{ to: '/', label: 'Dashboard' }]
+interface NavItem {
+  to: string
+  label: string
+}
+
+const adminNav: NavItem[] = [
+  { to: '/', label: 'Dashboard' },
+  { to: '/faculties', label: 'Faculties' },
+]
+
+const defaultNav: NavItem[] = [{ to: '/', label: 'Dashboard' }]
 
 function Layout({ session, onLogout }: LayoutProps) {
   const context: AppContext = { session, onLogout }
+  const navItems =
+    session.user.role === 'UNIVERSITY_SUPER_ADMIN' ? adminNav : defaultNav
 
   return (
     <div className="flex min-h-screen bg-slate-100">
@@ -54,6 +66,25 @@ function Layout({ session, onLogout }: LayoutProps) {
             </button>
           </div>
         </header>
+
+        <nav className="flex gap-2 overflow-x-auto border-b border-slate-200 bg-white px-4 py-2 md:hidden">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end
+              className={({ isActive }) =>
+                `whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium ${
+                  isActive
+                    ? 'bg-indigo-600 text-white'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
 
         <main className="flex-1 p-6">
           <Outlet context={context} />
