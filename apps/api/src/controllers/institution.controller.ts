@@ -5,11 +5,13 @@ import {
   getInstitutionById,
   updateInstitution,
   deactivateInstitution,
+  createInstitutionAdmin,
   ServiceError,
 } from "../services/institution.service";
 import {
   createInstitutionSchema,
   updateInstitutionSchema,
+  createInstitutionAdminSchema,
 } from "../validators/institution.validator";
 import { successResponse, errorResponse } from "../utils/apiResponse";
 
@@ -83,6 +85,25 @@ export async function deactivate(req: Request, res: Response) {
       return errorResponse(res, err.message, err.statusCode);
     }
     console.error("Deactivate institution error:", err);
+    return errorResponse(res, "Something went wrong. Please try again.", 500);
+  }
+}
+
+export async function createAdmin(req: Request, res: Response) {
+  try {
+    const parsed = createInstitutionAdminSchema.safeParse(req.body);
+
+    if (!parsed.success) {
+      return errorResponse(res, "Invalid input.", 400, parsed.error.flatten());
+    }
+
+    const admin = await createInstitutionAdmin(req.params.id as string, parsed.data);
+    return successResponse(res, "University admin created successfully.", admin, 201);
+  } catch (err) {
+    if (err instanceof ServiceError) {
+      return errorResponse(res, err.message, err.statusCode);
+    }
+    console.error("Create institution admin error:", err);
     return errorResponse(res, "Something went wrong. Please try again.", 500);
   }
 }

@@ -3,7 +3,9 @@ import { z } from "zod";
 import {
   createInstitutionSchema,
   updateInstitutionSchema,
+  createInstitutionAdminSchema,
 } from "../validators/institution.validator";
+import { hashPassword } from "../utils/password";
 
 export class ServiceError extends Error {
   statusCode: number;
@@ -16,6 +18,7 @@ export class ServiceError extends Error {
 
 type CreateInstitutionInput = z.infer<typeof createInstitutionSchema>;
 type UpdateInstitutionInput = z.infer<typeof updateInstitutionSchema>;
+type CreateInstitutionAdminInput = z.infer<typeof createInstitutionAdminSchema>;
 
 export async function createInstitution(input: CreateInstitutionInput) {
   const existing = await prisma.institution.findUnique({
@@ -66,5 +69,46 @@ export async function deactivateInstitution(id: string) {
   return prisma.institution.update({
     where: { id },
     data: { status: "INACTIVE" },
+  });
+}
+
+export async function createInstitutionAdmin(
+  institutionId: string,
+  input: CreateInstitutionAdminInput
+) {
+  const institution = await getInstitutionById(institutionId);
+
+  if (institution.status !== "ACTIVE") {
+    throw new ServiceError(
+      "Cannot add an admin to an inactive institution.",
+      400
+    );
+  }
+
+  const existing = await prisma.user.findUnique({
+    where: { email: input.email },
+  });
+
+  if (existing) {
+    throw new ServiceError("A user with this email already exists.", 409);
+  }
+
+  const passwordHash = await hashPassword(input.password);
+
+  return prisma.user.create({
+    data: {
+      email: input.email,
+      passwordHash,
+      role: "UNIVERSITY_SUPER_ADMIN",
+      institutionId: institution.id,
+    },
+    select: {
+      id: true,
+      email: true,
+      role: true,
+      institutionId: true,
+      status: true,
+      createdAt: true,
+    },
   });
 }

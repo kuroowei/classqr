@@ -5,6 +5,7 @@ import {
   getOne,
   update,
   deactivate,
+  createAdmin,
 } from "../controllers/institution.controller";
 import { authenticate } from "../middleware/auth.middleware";
 import { requireRole } from "../middleware/rbac.middleware";
@@ -19,5 +20,6 @@ router.get("/", list);
 router.get("/:id", getOne);
 router.put("/:id", update);
 router.patch("/:id/deactivate", deactivate);
+router.post("/:id/admin", createAdmin);
 
 export default router;
