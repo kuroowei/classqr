@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
+import AcademicSessionsPage from './pages/AcademicSessionsPage'
 import ComingSoonPage from './pages/ComingSoonPage'
 import DashboardPage from './pages/DashboardPage'
 import DepartmentsPage from './pages/DepartmentsPage'
@@ -54,6 +55,12 @@ function App() {
           <Route
             path="levels"
             element={isUniversityAdmin ? <LevelsPage /> : <Navigate to="/" replace />}
+          />
+          <Route
+            path="academic-sessions"
+            element={
+              isUniversityAdmin ? <AcademicSessionsPage /> : <Navigate to="/" replace />
+            }
           />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
