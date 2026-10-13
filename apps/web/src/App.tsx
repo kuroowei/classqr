@@ -9,6 +9,7 @@ import FacultiesPage from './pages/FacultiesPage'
 import LevelsPage from './pages/LevelsPage'
 import LoginPage from './pages/LoginPage'
 import ProgrammesPage from './pages/ProgrammesPage'
+import SemestersPage from './pages/SemestersPage'
 import { clearSession, loadSession } from './lib/auth'
 import type { Session } from './lib/auth'
 
@@ -61,6 +62,10 @@ function App() {
             element={
               isUniversityAdmin ? <AcademicSessionsPage /> : <Navigate to="/" replace />
             }
+          />
+          <Route
+            path="semesters"
+            element={isUniversityAdmin ? <SemestersPage /> : <Navigate to="/" replace />}
           />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
