@@ -6,6 +6,7 @@ import DashboardPage from './pages/DashboardPage'
 import DepartmentsPage from './pages/DepartmentsPage'
 import FacultiesPage from './pages/FacultiesPage'
 import LoginPage from './pages/LoginPage'
+import ProgrammesPage from './pages/ProgrammesPage'
 import { clearSession, loadSession } from './lib/auth'
 import type { Session } from './lib/auth'
 
@@ -44,6 +45,10 @@ function App() {
           <Route
             path="departments"
             element={isUniversityAdmin ? <DepartmentsPage /> : <Navigate to="/" replace />}
+          />
+          <Route
+            path="programmes"
+            element={isUniversityAdmin ? <ProgrammesPage /> : <Navigate to="/" replace />}
           />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
